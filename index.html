@@ -86,16 +86,8 @@
         <label for="distributorMargin">Distributor Margin (%):</label>
         <input type="number" id="distributorMargin" value="10" placeholder="Enter Distributor Margin (e.g., 10)" required>
 
-        <label for="cnfRequired">CNF?</label>
-        <select id="cnfRequired" onchange="handleCnfOption()">
-            <option value="No" selected>No</option>
-            <option value="Yes">Yes</option>
-        </select>
-
-        <div id="cnfMarginField" style="display: none;">
-            <label for="cnfMargin">CNF Margin (%):</label>
-            <input type="number" id="cnfMargin" value="5" placeholder="Enter CNF Margin (e.g., 5)">
-        </div>
+        <label for="cnfMargin">CNF Margin (%):</label>
+        <input type="number" id="cnfMargin" value="0" placeholder="Enter CNF Margin (e.g., 5)" required>
 
         <label for="scheme">Scheme:</label>
         <div class="scheme">

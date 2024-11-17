@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Margin Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], input[type="number"], select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .scheme {
+            display: flex;
+            align-items: center;
+        }
+        .scheme input {
+            width: 40%;
+            margin-right: 5px;
+        }
+        .scheme span {
+            margin-right: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            background: #f9fff9;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Margin Calculator</h2>
+<form id="marginCalcForm">
+    <label for="typeOfSales">Type of Sales:</label>
+    <select id="typeOfSales" onchange="handleTypeOfSales()">
+        <option value="PTR" selected>PTR</option>
+        <option value="Net">Net</option>
+    </select>
+
+    <div id="ptrFields">
+        <label for="mrp">MRP:</label>
+        <input type="number" id="mrp" placeholder="Enter MRP" required>
+
+        <label for="gst">GST (%):</label>
+        <select id="gst">
+            <option value="12" selected>12%</option>
+            <option value="18">18%</option>
+        </select>
+
+        <label for="retailMargin">Retail Margin (%):</label>
+        <input type="number" id="retailMargin" value="20" placeholder="Enter Retail Margin (e.g., 20)" required>
+
+        <label for="distributorMargin">Distributor Margin (%):</label>
+        <input type="number" id="distributorMargin" value="10" placeholder="Enter Distributor Margin (e.g., 10)" required>
+
+        <label for="cnfRequired">CNF?</label>
+        <select id="cnfRequired" onchange="handleCnfOption()">
+            <option value="No" selected>No</option>
+            <option value="Yes">Yes</option>
+        </select>
+
+        <div id="cnfMarginField" style="display: none;">
+            <label for="cnfMargin">CNF Margin (%):</label>
+            <input type="number" id="cnfMargin" value="5" placeholder="Enter CNF Margin (e.g., 5)">
+        </div>
+
+        <label for="scheme">Scheme:</label>
+        <div class="scheme">
+            <input type="number" id="quantitySold" value="10" required>
+            <span>+</span>
+            <input type="number" id="freeQuantity" value="0" required>
+        </div>
+
+        <label for="doctorCommission">Doctor Commission (%):</label>
+        <input type="number" id="doctorCommission" value="30" placeholder="Enter Doctor Commission (e.g., 30)" required>
+    </div>
+
+    <div id="netFields" style="display: none;">
+        <label for="netRate">Net Rate:</label>
+        <input type="number" id="netRate" placeholder="Enter Net Rate" required>
+
+        <label for="purchaseRateNet">Purchase Rate:</label>
+        <input type="number" id="purchaseRateNet" placeholder="Enter Purchase Rate" required>
+    </div>
+
+    <label for="purchaseRate">Purchase Rate:</label>
+    <input type="number" id="purchaseRate" placeholder="Enter Purchase Rate" required>
+
+    <button type="button" onclick="calculate()">Calculate</button>
+</form>
+
+<div class="result" id="result" style="display: none;"></div>
+
+<script>
+    function handleCnfOption() {
+        const cnfRequired = document.getElementById('cnfRequired').value;
+        const cnfMarginField = document.getElementById('cnfMarginField');
+        if (cnfRequired === 'Yes') {
+            cnfMarginField.style.display = 'block';
+        } else {
+            cnfMarginField.style.display = 'none';
+            document.getElementById('cnfMargin').value = 0;
+        }
+    }
+
+    function handleTypeOfSales() {
+        const typeOfSales = document.getElementById('typeOfSales').value;
+        const ptrFields = document.getElementById('ptrFields');
+        const netFields = document.getElementById('netFields');
+        const purchaseRate = document.getElementById('purchaseRate');
+
+        if (typeOfSales === "PTR") {
+            ptrFields.style.display = 'block';
+            netFields.style.display = 'none';
+            purchaseRate.style.display = 'block';
+        } else {
+            ptrFields.style.display = 'none';
+            netFields.style.display = 'block';
+            purchaseRate.style.display = 'none';
+        }
+    }
+
+    function calculate() {
+        const typeOfSales = document.getElementById('typeOfSales').value;
+
+        if (typeOfSales === "PTR") {
+            const mrp = parseFloat(document.getElementById('mrp').value);
+            const gst = parseFloat(document.getElementById('gst').value) / 100;
+            const retailMargin = parseFloat(document.getElementById('retailMargin').value) / 100;
+            const distributorMargin = parseFloat(document.getElementById('distributorMargin').value) / 100;
+            const cnfMargin = parseFloat(document.getElementById('cnfMargin').value) / 100 || 0;
+            const quantitySold = parseInt(document.getElementById('quantitySold').value, 10);
+            const freeQuantity = parseInt(document.getElementById('freeQuantity').value, 10);
+            const doctorCommission = parseFloat(document.getElementById('doctorCommission').value) / 100;
+            const purchaseRate = parseFloat(document.getElementById('purchaseRate').value);
+
+            const ptr = (mrp / (1 + gst)) * (1 - retailMargin);
+            const pts = ptr * (1 - distributorMargin);
+            const cnfRate = pts * (1 - cnfMargin);
+
+            const ptrBillValue = ptr * quantitySold;
+            const doctorComm = doctorCommission * ptrBillValue;
+            const distributorMarginValue = distributorMargin * ptrBillValue;
+            const cnfMarginValue = cnfMargin * (ptrBillValue - distributorMarginValue);
+
+            const effectiveRevenue = ptrBillValue - doctorComm - distributorMarginValue - cnfMarginValue;
+            const effectiveRevenuePerStrip = effectiveRevenue / (quantitySold + freeQuantity);
+
+            const grossProfitPerStrip = effectiveRevenuePerStrip - purchaseRate;
+            const margin = (grossProfitPerStrip / purchaseRate) * 100;
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `
+                <h4>Results</h4>
+                <p>PTR: ₹ ${ptr.toFixed(2)}</p>
+                <p>PTS: ₹ ${pts.toFixed(2)}</p>
+                <p>CNF Rate: ₹ ${cnfRate.toFixed(2)}</p>
+                <p>PTR Bill Value: ₹ ${ptrBillValue.toFixed(2)}</p>
+                <p>Doctor Commission: ₹ ${doctorComm.toFixed(2)}</p>
+                <p>Distributor Margin: ₹ ${distributorMarginValue.toFixed(2)}</p>
+                <p>CNF Margin: ₹ ${cnfMarginValue.toFixed(2)}</p>
+                <p>Effective Revenue: ₹ ${effectiveRevenue.toFixed(2)}</p>
+                <p>Effective Revenue per Strip: ₹ ${effectiveRevenuePerStrip.toFixed(2)}</p>
+                <p>Gross Profit per Strip: ₹ ${grossProfitPerStrip.toFixed(2)}</p>
+                <p>Margin: ${margin.toFixed(2)}%</p>
+            `;
+        } else if (typeOfSales === "Net") {
+            const netRate = parseFloat(document.getElementById('netRate').value);
+            const purchaseRate = parseFloat(document.getElementById('purchaseRateNet').value);
+
+            const grossProfitPerStrip = netRate - purchaseRate;
+            const margin = (grossProfitPerStrip / purchaseRate) * 100;
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `
+                <h4>Results</h4>
+                <p>Gross Profit per Strip: ₹ ${grossProfitPerStrip.toFixed(2)}</p>
+                <p>Margin: ${margin.toFixed(2)}%</p>
+            `;
+        }
+    }
+</script>
+
+</body>
+</html>

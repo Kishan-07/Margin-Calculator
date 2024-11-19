@@ -174,41 +174,15 @@
             const grossProfitPerStrip = effectiveRevenuePerStrip - purchaseRate;
             const margin = (grossProfitPerStrip / purchaseRate) * 100;
 
-
-            const doctorComm_var2 = doctorCommission * ptr;
-            const schemeValue_var2 = (freeQuantity / quantitySold) * purchaseRate;
-            const grossProfitOnPTR_var2 = ptr - purchaseRate - doctorComm_var2 - schemeValue_var2;
-            const grossProfitOnPTRPercentage_var2 = grossProfitOnPTR_var2 / ptr * 100;
-            const grossProfitOnPTS_var2 = pts - purchaseRate - doctorComm_var2 - schemeValue_var2;
-            const grossProfitOnPTSPercentage_var2 = grossProfitOnPTS_var2 / pts * 100;
-            const grossProfitOnCNF_var2 = cnfRate - purchaseRate - doctorComm_var2 - schemeValue_var2;
-            const grossProfitOnCNFPercentage_var2 = grossProfitOnCNF_var2 / cnfRate * 100;
-            
-
             document.getElementById('result').style.display = 'block';
             document.getElementById('result').innerHTML = `
                 <h4>Results</h4>
                 <p>PTR: ₹ ${ptr.toFixed(2)}</p>
                 <p>PTS: ₹ ${pts.toFixed(2)}</p>
                 <p>CNF Rate: ₹ ${cnfRate.toFixed(2)}</p>
-
-                <!-- <p>PTR Bill Value: ₹ ${ptrBillValue.toFixed(2)}</p> -->
-                <!-- <p>Doctor Commission: ₹ ${doctorComm.toFixed(2)}</p> -->
-                <!-- <p>Distributor Margin: ₹ ${distributorMarginValue.toFixed(2)}</p> -->
-                <!-- <p>CNF Margin: ₹ ${cnfMarginValue.toFixed(2)}</p> -->
-                <!-- <p>Effective Revenue: ₹ ${effectiveRevenue.toFixed(2)}</p> -->
-                <!-- <p>Effective Revenue per Strip: ₹ ${effectiveRevenuePerStrip.toFixed(2)}</p> -->
-                <!-- <p>Gross Profit per Strip: ₹ ${grossProfitPerStrip.toFixed(2)}</p> -->
-                <!-- <p>Margin: ${margin.toFixed(2)}%</p> -->
-
-                <p>Doctor Commission: ₹ ${doctorComm_var2.toFixed(2)}</p>
-                <p>Scheme Value: ₹ ${schemeValue_var2.toFixed(2)}</p>
-                <p>Gross Profit on PTR Value: ₹ ${grossProfitOnPTR_var2.toFixed(2)}</p>
-                <p>Gross Profit on PTR %: ${grossProfitOnPTRPercentage_var2.toFixed(2)}%</p>
-                <p>Gross Profit on PTS Value: ₹ ${grossProfitOnPTS_var2.toFixed(2)}</p>
-                <p>Gross Profit on PTS %: ${grossProfitOnPTSPercentage_var2.toFixed(2)}%</p>
-                <p>Gross Profit on C&F Value: ₹ ${grossProfitOnCNF_var2.toFixed(2)}</p>
-                <p>Gross Profit on C&F %: ${grossProfitOnCNFPercentage_var2.toFixed(2)}%</p>
+                <p>Effective Revenue per Strip: ₹ ${effectiveRevenuePerStrip.toFixed(2)}</p>
+                <p>Gross Profit per Strip: ₹ ${grossProfitPerStrip.toFixed(2)}</p>
+                <p>Margin: ${margin.toFixed(2)}%</p>
             `;
         } else if (typeOfSales === "Net") {
             const netRate = parseFloat(document.getElementById('netRate').value);

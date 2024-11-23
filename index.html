@@ -104,6 +104,12 @@
         <label for="netRate">Net Rate:</label>
         <input type="number" id="netRate" placeholder="Enter Net Rate" required>
 
+        <label for="quantitySoldNumber">Quantity Sold:</label>
+        <input type="number" id="quantitySoldNumber" placeholder="Enter Quantity Sold" required>
+
+        <label for="freeQuantityNumber">Free Quantity:</label>
+        <input type="number" id="freeQuantityNumber" placeholder="Enter Free Quantity" required>
+
         <label for="purchaseRateNet">Purchase Rate:</label>
         <input type="number" id="purchaseRateNet" placeholder="Enter Purchase Rate" required>
     </div>
@@ -186,9 +192,11 @@
             `;
         } else if (typeOfSales === "Net") {
             const netRate = parseFloat(document.getElementById('netRate').value);
+            const quantitySold = parseFloat(document.getElementById('quantitySoldNumber').value);
+            const freeQuantity = parseFloat(document.getElementById('freeQuantityNumber').value);
             const purchaseRate = parseFloat(document.getElementById('purchaseRateNet').value);
 
-            const grossProfitPerStrip = netRate - purchaseRate;
+            const grossProfitPerStrip = (netRate * quantitySold - purchaseRate * (quantitySold + freeQuantity))/(quantitySold + freeQuantity);
             const margin = (grossProfitPerStrip / purchaseRate) * 100;
 
             document.getElementById('result').style.display = 'block';
